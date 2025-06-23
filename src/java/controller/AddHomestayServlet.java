@@ -25,7 +25,7 @@ import java.util.UUID;
 public class AddHomestayServlet extends HttpServlet {
 
     // tempat simpan gambar
-    private static final String ABSOLUTE_UPLOAD_DIR = "C:/Users/TUF/Documents/NetBeansProjects/HomestayFinder/upload";//tukar path ikut folder dalam yang nak letak gambar
+    private static final String ABSOLUTE_UPLOAD_DIR = "C:\\Users\\Window 10\\Documents\\Sem 4\\WEB DEVELOPMENT\\Grup project test\\HomestayFinder\\upload";//tukar path ikut folder dalam yang nak letak gambar
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
