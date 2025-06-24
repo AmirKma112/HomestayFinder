@@ -9,9 +9,9 @@
 <html>
 <head>
   <title>HomestayFinder - Login</title>
-  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/login.css">
+  <link rel="stylesheet" href="css/login.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="<%=request.getContextPath()%>/js/login.js"></script>
+  <script src="js/login.js"></script>
 </head>
 <body>
 
@@ -32,7 +32,7 @@
     </form>
   </div>
 
-  <!-- Auto-close popup (no button) -->
+  <!-- Popup (auto-hide, no close button) -->
   <div id="popupBox" class="popup" style="display:none;">
     <div class="popup-content">
       <p id="popupMessage"></p>
