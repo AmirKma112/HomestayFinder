@@ -8,6 +8,6 @@ public class DBUtil {
     public static Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-            "jdbc:mysql://crossover.proxy.rlwy.net:21641/railway", "root", "vOwpAyrdGLDyvDzePSDAMdxJQtpaqkaG");
+            "jdbc:mysql://mainline.proxy.rlwy.net:31869/railway?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC", "root", "imsdAgIUZwcdPfXZlfPXuxfnHffdyblU");
     }
 }
