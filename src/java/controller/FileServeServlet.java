@@ -8,7 +8,7 @@ import java.io.*;
 @WebServlet("/FileServeServlet")
 public class FileServeServlet extends HttpServlet {
 
-    private static final String FILE_DIRECTORY = "C:\\Users\\Window 10\\Documents\\Sem 4\\WEB DEVELOPMENT\\Grup project test\\HomestayFinder\\upload";//tukar path ikut folder gambar
+    private static final String FILE_DIRECTORY = "https://github.com/AmirKma112/HomestayFinder/tree/master/upload";//tukar path ikut folder gambar
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
