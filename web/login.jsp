@@ -34,12 +34,5 @@
           </form>
         </div>
 
-        <!-- Popup untuk mesej -->
-        <div id="popupBox" class="popup">
-          <div class="popup-content">
-            <p id="popupMessage"></p>
-          </div>
-        </div>
-
     </body>
 </html>
