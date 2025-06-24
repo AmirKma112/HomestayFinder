@@ -10,9 +10,9 @@
 <html>
     <head>
       <title>HomestayFinder - Login</title>
-      <link rel="stylesheet" href="css/login.css">
+      <link rel="stylesheet" href="<%= request.getContextPath() %>css/login.css">
       <script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
-      <script src="js/login.js"></script>
+      <script src="<%= request.getContextPath() %>js/login.js"></script>
     </head>
     <body>
 
