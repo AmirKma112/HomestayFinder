@@ -26,10 +26,5 @@
               <button type="submit" class="btn-main">Login</button>
           </form>
         </div>
-        <div id="popupBox" class="popup">
-          <div class="popup-content">
-            <p id="popupMessage"></p>
-          </div>
-        </div>
     </body>
 </html>
