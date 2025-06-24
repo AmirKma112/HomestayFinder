@@ -24,8 +24,8 @@ import java.util.UUID;
 )
 public class AddHomestayServlet extends HttpServlet {
 
-    // tempat simpan gambar
-    private static final String ABSOLUTE_UPLOAD_DIR = "https://github.com/AmirKma112/HomestayFinder/tree/master/upload";//tukar path ikut folder dalam yang nak letak gambar
+    // Relative path for uploaded images inside deployed webapp
+    private static final String RELATIVE_UPLOAD_DIR = "/upload";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -39,7 +39,7 @@ public class AddHomestayServlet extends HttpServlet {
         }
 
         try {
-            // Ambil detail homestay
+            // Get homestay info
             String name = request.getParameter("name");
             String description = request.getParameter("description");
             String address = request.getParameter("address");
@@ -57,24 +57,24 @@ public class AddHomestayServlet extends HttpServlet {
             boolean hasKitchen = request.getParameter("has_kitchen") != null;
             boolean hasWashingMachine = request.getParameter("has_washing_machine") != null;
 
-            // Uruskan Fail Gambar
+            // Process uploaded image
             Part filePart = request.getPart("image");
             String originalFileName = extractFileName(filePart);
-
-            // Elakkan nama fail berganda
             String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
             String uniqueName = UUID.randomUUID().toString() + extension;
 
-            // Buat folder upload jika belum wujud
-            File uploadDir = new File(ABSOLUTE_UPLOAD_DIR);
+            // Resolve server-side path to uploads folder
+            String uploadPath = getServletContext().getRealPath(RELATIVE_UPLOAD_DIR);
+            File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
-            // Simpan fail di lokasi tetap
+            // Save image to server
             File savedFile = new File(uploadDir, uniqueName);
             filePart.write(savedFile.getAbsolutePath());
 
             try (Connection conn = DBUtil.getConnection()) {
 
+                // Save homestay info
                 Homestay homestay = new Homestay();
                 homestay.setUserId(ownerId);
                 homestay.setName(name);
@@ -96,9 +96,10 @@ public class AddHomestayServlet extends HttpServlet {
                 HomestayDAO homestayDAO = new HomestayDAO(conn);
                 int newHomestayId = homestayDAO.insert(homestay);
 
+                // Save image info to database (store just relative path)
                 Image img = new Image();
                 img.setHomestayId(newHomestayId);
-                img.setImagePath(uniqueName);
+                img.setImagePath("upload/" + uniqueName);
                 img.setUploadedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
                 ImageDAO imgDAO = new ImageDAO(conn);
