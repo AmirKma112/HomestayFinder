@@ -23,31 +23,35 @@ $(document).ready(function () {
 
   // ✅ Popup jika login berjaya
   if (login === "success") {
-    let message = "";
     if (role === "customer") {
-      message = "You are logged in as a Customer.";
+      showPopup("You are logged in as a Customer.");
     } else if (role === "homestay_owner") {
-      message = "You are logged in as a Homestay Owner.";
+      showPopup("You are logged in as a Homestay Owner.");
     } else {
-      message = "Successful Login.";
+      showPopup("Successful Login.");
     }
-
-    showPopup(message);
-
-    // Auto redirect after 2.5 seconds
-    setTimeout(() => {
-      const userRole = sessionStorage.getItem("user_role");
-
-      if (userRole === "homestay_owner") {
-        window.location.replace("OwnerDashboardServlet");
-      } else if (userRole === "customer") {
-        window.location.replace("CustomerDashboardServlet");
-      } else {
-        window.location.replace("homepage.jsp");
-      }
-    }, 2500);
   }
 
+  // ✅ Bila popup ditutup → redirect ikut jenis user
+  // login.js
+    $("#popupClose").click(function () {
+      $("#popupBox").fadeOut();
+
+      if (login === "success"){
+        const userRole = sessionStorage.getItem("user_role");
+
+        if(userRole === "homestay_owner"){
+            window.location.replace("OwnerDashboardServlet");
+        } else if (userRole === "customer"){
+            window.location.replace("CustomerDashboardServlet");
+        } else {
+            window.location.replace("homepage.jsp");
+        }
+      }
+    });
+
+
+  // Fungsi paparan popup
   function showPopup(msg) {
     $("#popupMessage").text(msg);
     $("#popupBox").fadeIn();
