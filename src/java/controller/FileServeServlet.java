@@ -8,7 +8,7 @@ import java.io.*;
 @WebServlet("/FileServeServlet")
 public class FileServeServlet extends HttpServlet {
 
-    private static final String RELATIVE_UPLOAD_DIR = "/upload";
+    private static final String FILE_DIRECTORY = System.getProperty("java.io.tmpdir") + File.separator + "upload";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -20,8 +20,7 @@ public class FileServeServlet extends HttpServlet {
             return;
         }
 
-        String filePath = getServletContext().getRealPath(RELATIVE_UPLOAD_DIR + "/" + fileName);
-        File file = new File(filePath);
+        File file = new File(FILE_DIRECTORY, fileName);
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found.");
             return;
