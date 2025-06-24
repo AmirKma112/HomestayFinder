@@ -24,8 +24,8 @@ import java.util.UUID;
 )
 public class AddHomestayServlet extends HttpServlet {
 
-    // tempat simpan gambar
-    private static final String ABSOLUTE_UPLOAD_DIR = "C:\\Users\\Window 10\\Documents\\Sem 4\\WEB DEVELOPMENT\\Grup project test\\HomestayFinder\\upload";//tukar path ikut folder dalam yang nak letak gambar
+    // Folder simpan fail (dalam folder web/uploads)
+    private static final String UPLOAD_DIR = "upload";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -57,19 +57,20 @@ public class AddHomestayServlet extends HttpServlet {
             boolean hasKitchen = request.getParameter("has_kitchen") != null;
             boolean hasWashingMachine = request.getParameter("has_washing_machine") != null;
 
-            // Uruskan Fail Gambar
+            // Fail Gambar
             Part filePart = request.getPart("image");
             String originalFileName = extractFileName(filePart);
 
-            // Elakkan nama fail berganda
             String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
             String uniqueName = UUID.randomUUID().toString() + extension;
 
-            // Buat folder upload jika belum wujud
-            File uploadDir = new File(ABSOLUTE_UPLOAD_DIR);
+            // Path sebenar (dalam konteks servlet/web folder)
+            String applicationPath = request.getServletContext().getRealPath("");
+            String uploadPath = applicationPath + File.separator + UPLOAD_DIR;
+
+            File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
-            // Simpan fail di lokasi tetap
             File savedFile = new File(uploadDir, uniqueName);
             filePart.write(savedFile.getAbsolutePath());
 
@@ -98,7 +99,7 @@ public class AddHomestayServlet extends HttpServlet {
 
                 Image img = new Image();
                 img.setHomestayId(newHomestayId);
-                img.setImagePath(uniqueName);
+                img.setImagePath("upload/" + uniqueName); // penting untuk JSP paparkan
                 img.setUploadedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
                 ImageDAO imgDAO = new ImageDAO(conn);
