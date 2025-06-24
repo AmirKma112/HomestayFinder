@@ -24,8 +24,8 @@ import java.util.UUID;
 )
 public class AddHomestayServlet extends HttpServlet {
 
-    // Relative path for uploaded images inside deployed webapp
-    private static final String RELATIVE_UPLOAD_DIR = "/upload";
+    // Railway safe directory
+    private static final String TEMP_UPLOAD_DIR = System.getProperty("java.io.tmpdir") + File.separator + "upload";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -63,18 +63,16 @@ public class AddHomestayServlet extends HttpServlet {
             String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
             String uniqueName = UUID.randomUUID().toString() + extension;
 
-            // Resolve server-side path to uploads folder
-            String uploadPath = getServletContext().getRealPath(RELATIVE_UPLOAD_DIR);
-            File uploadDir = new File(uploadPath);
+            // Create upload directory if not exists
+            File uploadDir = new File(TEMP_UPLOAD_DIR);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
-            // Save image to server
             File savedFile = new File(uploadDir, uniqueName);
             filePart.write(savedFile.getAbsolutePath());
 
             try (Connection conn = DBUtil.getConnection()) {
 
-                // Save homestay info
+                // Insert homestay
                 Homestay homestay = new Homestay();
                 homestay.setUserId(ownerId);
                 homestay.setName(name);
@@ -96,15 +94,16 @@ public class AddHomestayServlet extends HttpServlet {
                 HomestayDAO homestayDAO = new HomestayDAO(conn);
                 int newHomestayId = homestayDAO.insert(homestay);
 
-                // Save image info to database (store just relative path)
+                // Save image path to DB (only filename)
                 Image img = new Image();
                 img.setHomestayId(newHomestayId);
-                img.setImagePath("upload/" + uniqueName);
+                img.setImagePath(uniqueName); // only filename
                 img.setUploadedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
                 ImageDAO imgDAO = new ImageDAO(conn);
                 imgDAO.insert(img);
 
+                // ✅ Success redirect
                 response.sendRedirect("MyHomestayServlet");
 
             } catch (Exception ex) {
