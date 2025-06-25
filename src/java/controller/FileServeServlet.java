@@ -20,7 +20,7 @@ public class FileServeServlet extends HttpServlet {
             return;
         }
 
-        String filePath = getServletContext().getRealPath(RELATIVE_UPLOAD_DIR + "/" + fileName);
+        String filePath = "/tmp/upload/" + fileName;
         File file = new File(filePath);
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found.");
