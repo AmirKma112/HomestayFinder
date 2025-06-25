@@ -64,7 +64,7 @@ public class AddHomestayServlet extends HttpServlet {
             String uniqueName = UUID.randomUUID().toString() + extension;
 
             // Resolve server-side path to uploads folder
-            String uploadPath = "/tmp/upload";
+            String uploadPath = getServletContext().getRealPath(RELATIVE_UPLOAD_DIR);
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
